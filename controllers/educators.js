@@ -273,8 +273,8 @@ router.post('/signup', uploadTV.single("tryfile"), (req, res) => {
                         Please click on the given link to verify your email for activating your account on OCera EdTech. The link is valid for one day only.<br><br>
                         http://localhost:8000/be-an-educator/verifyemail/key/${key}<br><br>
                         Thank You<br>Team OCera EdTech`
-                        res.send('success')
-//                         sendMail(req.body.eduEmail, 'Email Verification for OCera EdTech Account', text, res, 'imm')
+//                         res.send('success')
+                        sendMail(req.body.eduEmail, 'Email Verification for OCera EdTech Account', text, res, 'imm')
                         }
                 })
             }
@@ -298,8 +298,8 @@ router.post('/signup', uploadTV.single("tryfile"), (req, res) => {
                     Please click on the given link to verify your email for activating your account on OCera EdTech. The link is valid for one day only.<br><br>
                     http://localhost:8000/be-an-educator/verifyemail/key/${key}<br><br>
                     Thank You<br>Team OCera EdTech`
-                    res.send('success')
-//                     sendMail(req.body.eduEmail, 'Email Verification for OCera EdTech Account', text, res, 'imm')
+//                     res.send('success')
+                    sendMail(req.body.eduEmail, 'Email Verification for OCera EdTech Account', text, res, 'imm')
                 }
             });
         }
