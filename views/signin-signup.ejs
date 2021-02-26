@@ -237,6 +237,7 @@
                 var data = new FormData(form)
                 document.getElementById('signupbtn').style.cursor = 'progress'
                 document.getElementById('signupform').style.cursor = 'progress'
+                console.log('hello')
                 $.ajax({
                     type: "POST",
                     enctype: false,
@@ -246,6 +247,7 @@
                     contentType: false,
                     cache: false,
                     success: (data) => {
+                        console.log('success')
                         document.getElementById('signupbtn').style.cursor = 'auto'
                         document.getElementById('signupform').style.cursor = 'auto'
                         if (data == 'success') {
