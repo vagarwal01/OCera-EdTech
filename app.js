@@ -24,7 +24,7 @@ global.__basedir = __dirname;
 
 
 // SOCIAL LOGINS
-require('dotenv').config()
+// require('dotenv').config()
 const passport = require('passport')
 require('./google-passport-setup')
 require('./facebook-passport-setup')
