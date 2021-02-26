@@ -3,8 +3,10 @@ const mongoose = require('mongoose')
 mongoose.connect("mongodb+srv://OEadmin:OE@*2021@oe-cluster.twvhr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
     if (err) {
         console.log(err);
+        alert(err)
     } else {
         console.log('success')
+        alert('success')
     }
 })
 
