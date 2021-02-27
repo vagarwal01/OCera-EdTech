@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'uploads')));
 // app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ limit: '25mb', extended: true }))
+app.use(bodyparser.urlencoded({ limit: '25mb', extended: true, parameterLimit:25000 }))
 global.__basedir = __dirname;
 
 
