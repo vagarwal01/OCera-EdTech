@@ -1756,7 +1756,7 @@ router.get('/mou/:type', (req, res) => {
         }
     })
 })
-router.post('/save/mou', uploadMOU.fields([{ name: 'user_signature' }, { name: 'w1_signature' }, { name: 'w2_signature' }]), (req, res) => {
+router.post('/save/mou', (req, res) => {
     console.log('saving...')
     var uploadMOU = multer({ storage: MOUstorage }).array("user_signature", "w1_signature", "w2_signature")
     uploadMOU(req, res, err => {
