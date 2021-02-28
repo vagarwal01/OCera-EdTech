@@ -125,13 +125,16 @@ var MOUstorage = multer.diskStorage({
         return cb(null, dir)
     },
     filename: (req, file, cb) => {
-        var filename = file.fieldname + '.' + file.originalname.split('.')[1]
+        if(req.files.length == 1)
+            var filename = 'user_signature.' + file.originalname.split('.')[1]
+        else if(req.files.length == 2) 
+            var filename = 'w1_signature.' + file.originalname.split('.')[1]
+        else 
+            var filename = 'w2_signature.' + file.originalname.split('.')[1]
         cb(null, filename);
     },
 
 })
-var uploadMOU = multer({ storage: MOUstorage });
-module.exports = uploadMOU;
 
 // EDUCATOR HOME
 router.get('/', (req, res) => {
@@ -1758,12 +1761,12 @@ router.get('/mou/:type', (req, res) => {
 })
 router.post('/save/mou', (req, res) => {
     console.log('saving...')
-    var uploadMOU = multer({ storage: MOUstorage }).array("user_signature", "w1_signature", "w2_signature")
+    var uploadMOU = multer({ storage: MOUstorage }).array("signatures", 3)
     uploadMOU(req, res, err => {
         console.log(req.files)
         var msg = req.body.salutation + ". " + req.body.username + " " + req.body.relation_type + " of " + req.body.family_name + " " + req.body.organisation_type + " " + req.body.organisation_name + " having his " + req.body.address_type + " at " + req.body.address + "."
         console.log(msg)
-        var newVal = { $set: { mouDetails: { 'basic': msg, 'file': req.files.user_signature[0].filename, 'witness1': { 'name': req.body.w1_name, 'address': req.body.w1_add, 'file': req.files.w1_signature[0].filename }, 'witness2': { 'name': req.body.w2_name, 'address': req.body.w2_add, 'file': req.files.w2_signature[0].filename } } } }
+        var newVal = { $set: { mouDetails: { 'basic': msg, 'file': req.files[0].filename, 'witness1': { 'name': req.body.w1_name, 'address': req.body.w1_add, 'file': req.files[1].filename }, 'witness2': { 'name': req.body.w2_name, 'address': req.body.w2_add, 'file': req.files[0].filename } } } }
         courseModel.updateOne({ '_id': req.session.courseId }, newVal, (err, user) => {
             if (err) {
                 console.log(err)
