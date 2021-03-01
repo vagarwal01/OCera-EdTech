@@ -392,6 +392,7 @@
                             var extFile1 = file1.name.substr(idxDot1, file1.name.length).toLowerCase();
                             if ((file1.size <= limit1) && (extFile1 == "png" || extFile1 == "jpg" || extFile1 == "jpeg")) {
                                 img = new Image();
+                                var imgflag = 0
                                 img.onload = function() {
                                     if (this.width == 750 && this.height == 421) {
                                         document.getElementById('cimg-check').style.display = 'inline-block'
@@ -401,10 +402,14 @@
                                         document.getElementById('cimg-error').style.display = 'inline-block'
                                         document.getElementById('cimg-check').style.display = 'none'
                                         document.getElementById('errormssg').innerText = 'Course Image dimensions should be 750x421 pixels.'
+                                        imgflag = 1
                                         return
                                     }
                                 };
                                 img.src = window.URL.createObjectURL(file1)
+                                if(imgflag == 1) {
+                                    return
+                                }
                             } else if (file1.size > limit1) {
                                 document.getElementById('cimg-error').style.display = 'inline-block'
                                 document.getElementById('cimg-check').style.display = 'none'
