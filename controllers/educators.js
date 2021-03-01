@@ -223,25 +223,37 @@ router.post('/login', uploadTV.single("tryfile"), (req, res) => {
             }
             if (user) {
                 console.log("user found")
-                if(!user.isActivated) {
-                    console.log('not registered')
-                    res.send('This email is not yet registered.')
-                } else if(user.isActivated == false) { 
-                    console.log('not registered')
-                    res.send('This email is not yet registered.')
-                } else {
-                    if (user.educatorPassword == req.body.eduPwd) {
-                        req.session.email = user.educatorEmail
-                        req.session.name = user.educatorName
-                        if (user.proComp && user.proComp == 'Y')
-                            res.send('success')
-                        else {
-                            res.send('profile')
-                        }
-                    } else {
-                        res.send('Incorrect Password')
+                if (user.educatorPassword == req.body.eduPwd) {
+                    req.session.email = user.educatorEmail
+                    req.session.name = user.educatorName
+                    if (user.proComp && user.proComp == 'Y')
+                        res.send('success')
+                    else {
+                        res.send('profile')
                     }
+                } else {
+                    res.send('Incorrect Password')
                 }
+                
+//                 if(!user.isActivated) {
+//                     console.log('not registered')
+//                     res.send('This email is not yet registered.')
+//                 } else if(user.isActivated == false) { 
+//                     console.log('not registered')
+//                     res.send('This email is not yet registered.')
+//                 } else {
+//                     if (user.educatorPassword == req.body.eduPwd) {
+//                         req.session.email = user.educatorEmail
+//                         req.session.name = user.educatorName
+//                         if (user.proComp && user.proComp == 'Y')
+//                             res.send('success')
+//                         else {
+//                             res.send('profile')
+//                         }
+//                     } else {
+//                         res.send('Incorrect Password')
+//                     }
+//                 }
             } else {
                 console.log('not registered')
                 res.send('This email is not yet registered.')
@@ -259,35 +271,36 @@ router.post('/signup', uploadTV.single("tryfile"), (req, res) => {
             res.send(err)
         }
         if (user) {
-            if(user.isActivated == true) {
-                console.log("user found")
-                console.log(user)
-                res.send('This email is already registered.')    
-            } else {
-                var newVal = {$set: { educatorName: req.body.eduName, educatorPassword: req.body.eduPwd, regDate: new Date()}}
-                educatorModel.updateOne({ 'educatorEmail': req.body.eduEmail }, newVal, (err, user1) => {
-                    if (err) {
-                        console.log(err)
-                        res.send(err)    
-                    } else {
-                        var key = user._id
-                        key = key.toString()
-                        var text = `Hello ${req.body.eduName},<br><br>
-                        Please click on the given link to verify your email for activating your account on OCera EdTech. The link is valid for one day only.<br><br>
-                        http://localhost:8000/be-an-educator/verifyemail/key/${key}<br><br>
-                        Thank You<br>Team OCera EdTech`
-                        res.send('success')
-//                         sendMail(req.body.eduEmail, 'Email Verification for OCera EdTech Account', text, res, 'imm')
-                        }
-                })
-            }
+            res.send('This email is already registered.')    
+//             if(user.isActivated == true) {
+//                 console.log("user found")
+//                 console.log(user)
+//                 res.send('This email is already registered.')    
+//             } else {
+//                 var newVal = {$set: { educatorName: req.body.eduName, educatorPassword: req.body.eduPwd, regDate: new Date()}}
+//                 educatorModel.updateOne({ 'educatorEmail': req.body.eduEmail }, newVal, (err, user1) => {
+//                     if (err) {
+//                         console.log(err)
+//                         res.send(err)    
+//                     } else {
+//                         var key = user._id
+//                         key = key.toString()
+//                         var text = `Hello ${req.body.eduName},<br><br>
+//                         Please click on the given link to verify your email for activating your account on OCera EdTech. The link is valid for one day only.<br><br>
+//                         http://localhost:8000/be-an-educator/verifyemail/key/${key}<br><br>
+//                         Thank You<br>Team OCera EdTech`
+//                         res.send('success')
+// //                         sendMail(req.body.eduEmail, 'Email Verification for OCera EdTech Account', text, res, 'imm')
+//                         }
+//                 })
+//             }
         } else {
             console.log('not registered')
             var newEducator = new educatorModel()
             newEducator.educatorName = req.body.eduName
             newEducator.educatorEmail = req.body.eduEmail
             newEducator.educatorPassword = req.body.eduPwd
-            newEducator.isActivated = false
+//             newEducator.isActivated = false
             newEducator.regDate = new Date()
             newEducator.save((err, doc) => {
                 if (err) {
@@ -338,7 +351,8 @@ router.post('/fogot-pwd', uploadTV.single("tryfile"), (req, res) => {
         if (err) {
             res.send(err)
         }
-        if (user && user.isActivated == true) {
+//         if (user && user.isActivated == true) {
+        if (user) {
             console.log("user found")
             console.log(user)
             var newVal = { $set: { educatorPassword: req.body.eduFPPwd } }
