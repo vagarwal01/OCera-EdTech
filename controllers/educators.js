@@ -1603,7 +1603,8 @@ async function saveWeekStatus(week, req, res, type, totalWeeks) {
         }
     })
 }
-router.post('/save/courseLandingPage', uploadCI.fields([{ name: 'course_thumbnail' }, { name: 'promo_video' }]), (req, res) => {
+// router.post('/save/courseLandingPage', uploadCI.fields([{ name: 'course_thumbnail' }, { name: 'promo_video' }]), (req, res) => {
+router.post('/save/courseLandingPage', (req, res) => {
     console.log(req.session.courseId)
     console.log(req.body)
     console.log(req.files)
@@ -1775,26 +1776,42 @@ router.get('/mou/:type', (req, res) => {
 })
 router.post('/save/mou', (req, res) => {
     console.log('saving...')
-    var uploadMOU = multer({ storage: MOUstorage }).array("signatures", 3)
-    uploadMOU(req, res, err => {
-        console.log(req.files)
-        var msg = req.body.salutation + ". " + req.body.username + " " + req.body.relation_type + " of " + req.body.family_name + " " + req.body.organisation_type + " " + req.body.organisation_name + " having his " + req.body.address_type + " at " + req.body.address + "."
-        console.log(msg)
-        var newVal = { $set: { mouDetails: { 'basic': msg, 'file': req.files[0].filename, 'witness1': { 'name': req.body.w1_name, 'address': req.body.w1_add, 'file': req.files[1].filename }, 'witness2': { 'name': req.body.w2_name, 'address': req.body.w2_add, 'file': req.files[0].filename } } } }
-        courseModel.updateOne({ '_id': req.session.courseId }, newVal, (err, user) => {
-            if (err) {
-                console.log(err)
+    var msg = req.body.salutation + ". " + req.body.username + " " + req.body.relation_type + " of " + req.body.family_name + " " + req.body.organisation_type + " " + req.body.organisation_name + " having his " + req.body.address_type + " at " + req.body.address + "."
+    console.log(msg)
+    var newVal = { $set: { mouDetails: { 'basic': msg, 'file': 'sig.jpg', 'witness1': { 'name': req.body.w1_name, 'address': req.body.w1_add, 'file': 'sig.jpg' }, 'witness2': { 'name': req.body.w2_name, 'address': req.body.w2_add, 'file': 'sig.jpg' } } } }
+    courseModel.updateOne({ '_id': req.session.courseId }, newVal, (err, user) => {
+        if (err) {
+            console.log(err)
+            res.send('There occurred some problem.')
+        } else {
+            console.log(user)
+            if (!user || user['ok'] == 0) {
                 res.send('There occurred some problem.')
             } else {
-                console.log(user)
-                if (!user || user['ok'] == 0) {
-                    res.send('There occurred some problem.')
-                } else {
-                    res.send('success')
-                }
+                res.send('success')
             }
-        })    
-    })
+        }
+    })    
+//     var uploadMOU = multer({ storage: MOUstorage }).array("signatures", 3)
+//     uploadMOU(req, res, err => {
+//         console.log(req.files)
+//         var msg = req.body.salutation + ". " + req.body.username + " " + req.body.relation_type + " of " + req.body.family_name + " " + req.body.organisation_type + " " + req.body.organisation_name + " having his " + req.body.address_type + " at " + req.body.address + "."
+//         console.log(msg)
+//         var newVal = { $set: { mouDetails: { 'basic': msg, 'file': req.files[0].filename, 'witness1': { 'name': req.body.w1_name, 'address': req.body.w1_add, 'file': req.files[1].filename }, 'witness2': { 'name': req.body.w2_name, 'address': req.body.w2_add, 'file': req.files[0].filename } } } }
+//         courseModel.updateOne({ '_id': req.session.courseId }, newVal, (err, user) => {
+//             if (err) {
+//                 console.log(err)
+//                 res.send('There occurred some problem.')
+//             } else {
+//                 console.log(user)
+//                 if (!user || user['ok'] == 0) {
+//                     res.send('There occurred some problem.')
+//                 } else {
+//                     res.send('success')
+//                 }
+//             }
+//         })    
+//     })
 })
 router.get('/bookYourSlot', (req, res) => res.render('educator/book_your_slot'))
 router.post('/sendEmail/confirmBooking', (req, res) => {
